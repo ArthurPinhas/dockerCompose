@@ -1,0 +1,118 @@
+version: "3"
+
+services:
+  it-tools:
+    image: "corentinth/it-tools:latest"
+    container_name: it-tools
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+---
+
+version: '3'
+
+services:
+  plex:
+    image: plexinc/pms-docker:latest
+    container_name: Plex
+    env_file: .env
+    environment:
+      - TZ=Etc/UTC
+      - PLEX_CLAIM=
+      - PLEX_UID=$PLEX_UID
+      - PLEX_GID=$PLEX_GID
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - TERM=xterm
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - CHANGE_CONFIG_DIR_OWNERSHIP=true
+      - HOME=/config
+    network_mode: host
+    volumes:
+      - "/volume1/docker/plex/config:/config"
+      - "/volume1/docker/plex/data:/data"
+      - "/volume1/docker/plex/transcode:/transcode"
+      - "/volume1/Movies:/movies"
+      - "/volume1/TvShows:/tvshows"
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+---
+
+version: '3'
+
+services:
+  adguard_home:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    environment:
+      TZ: "Asia/Jerusalem"
+    networks:
+      - ag_network
+    ports:
+      - "3000:3000/tcp"
+      - "3000:3000/udp"
+      - "443:443/tcp"
+      - "443:443/udp"
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "5443:5443/tcp"
+      - "5443:5443/udp"
+      - "6060:6060/tcp"
+      - "67:67/udp"
+      - "68:68/udp"
+      - "80:80/tcp"
+      - "853:853/tcp"
+      - "853:853/udp"
+    volumes:
+      - "/volume1/docker/adguardhome/conf:/opt/adguardhome/conf"
+      - "/volume1/docker/adguardhome/work:/opt/adguardhome/work"
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  ag_network:
+    external:
+      name: ag_network
+
+---
+
+version: '3'
+
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_LABEL_ENABLE: true
+      WATCHTOWER_INCLUDE_RESTARTING: true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+---
+
+version: "3.3"
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    env_file: .env
+    environment:
+      PUID: $PUID
+      PGID: $GUID
+    ports:
+      - 3000:3000
+    volumes:
+      - /volume1/docker/homepage/config:/app/config
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
