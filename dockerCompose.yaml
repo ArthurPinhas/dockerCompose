@@ -1,9 +1,9 @@
-version: "3"
+version: '3'
 
 services:
   it-tools:
-    image: "corentinth/it-tools:latest"
     container_name: it-tools
+    image: corentinth/it-tools:latest
     ports:
       - "8080:80"
     restart: unless-stopped
@@ -16,8 +16,8 @@ version: '3'
 
 services:
   plex:
-    image: plexinc/pms-docker:latest
     container_name: Plex
+    image: plexinc/pms-docker:latest
     env_file: .env
     environment:
       - TZ=Etc/UTC
@@ -47,10 +47,9 @@ version: '3'
 
 services:
   adguard_home:
-    image: adguard/adguardhome:latest
     container_name: adguardhome
+    image: adguard/adguardhome:latest
     environment:
-      TZ: "Asia/Jerusalem"
     networks:
       - ag_network
     ports:
@@ -86,8 +85,8 @@ version: '3'
 
 services:
   watchtower:
-    image: containrrr/watchtower
     container_name: watchtower
+    image: containrrr/watchtower
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -100,11 +99,12 @@ services:
 
 ---
 
-version: "3.3"
+version: '3.3'
+
 services:
   homepage:
-    image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
+    image: ghcr.io/gethomepage/homepage:latest
     env_file: .env
     environment:
       PUID: $PUID
@@ -116,3 +116,46 @@ services:
     restart: unless-stopped
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+
+---
+
+version: '3'
+
+services:
+  hbbs:
+    container_name: hbbs
+    image: rustdesk/rustdesk-server:latest
+    command: hbbs -r $hostIP:21117 -k _
+    volumes:
+      - ./data:/root
+    network_mode: host
+    depends_on:
+      - hbbr
+    restart: always
+
+  hbbr:
+    container_name: hbbr
+    image: rustdesk/rustdesk-server:latest
+    command: hbbr -k _
+    volumes:
+      - ./data:/root
+    network_mode: host
+    restart: always
+
+---
+
+version: '3'
+
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    ports:
+      - 9443:9443
+    volumes:
+      - /volume1/docker/portainer/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  data:
