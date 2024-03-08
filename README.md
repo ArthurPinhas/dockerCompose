@@ -24,6 +24,14 @@ Watchtower is deployed to automatically update Docker containers to their latest
 
 The Homepage service deploys the latest image from `ghcr.io/gethomepage/homepage`. It sets up environment variables, ports, and volumes for configuration and data persistence. It is also labeled to enable automatic updates using Watchtower.
 
+### hbbs and hbbr
+
+The HBBs and HBBR services deploy the latest RustDesk Server Docker image from `rustdesk/rustdesk-server`. They each have their respective configurations for command, volumes, network mode, and restart policy.
+
+### portainer
+
+The Portainer service deploys the latest Portainer Community Edition Docker image from `portainer/portainer-ce`. It exposes port 9443 on the host and mounts volumes for data persistence. It restarts automatically unless stopped.
+
 ## Usage
 
 1. Clone or download this repository to your local machine.
