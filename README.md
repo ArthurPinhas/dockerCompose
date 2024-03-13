@@ -2,23 +2,23 @@
 
 This repository contains a Docker Compose configuration file for deploying multiple services using Docker containers.
 
-## Services
+## Services Overview
 
 ### it-tools
 
-This service runs a tool container based on the latest image from `corentinth/it-tools`. It exposes port 8080 on the host and restarts automatically unless stopped.
+**Description**: This service runs a container providing a collection of IT tools and utilities, facilitating tasks such as network diagnostics, system monitoring, and troubleshooting. It exposes port 8080 on the host for accessing the tools.
 
 ### plex
 
-The Plex service deploys the latest Plex Media Server Docker image from `plexinc/pms-docker`. It sets up environment variables, network mode, and volumes for data persistence. This service is labeled to enable automatic updates using Watchtower.
+**Description**: The Plex service enables users to deploy and manage a Plex Media Server, a versatile platform for organizing, streaming, and accessing multimedia content.
 
 ### adguard_home
 
-The AdGuard Home service deploys the latest AdGuard Home Docker image from `adguard/adguardhome`. It configures network ports, environment variables, and volumes for data persistence. It is also labeled to enable automatic updates using Watchtower.
+**Description**: The AdGuard Home service offers network-wide ad blocking and privacy protection by deploying the AdGuard Home application. It provides advanced filtering capabilities to block ads, trackers, and malicious websites, enhancing browsing security and privacy for all devices connected to the network.
 
 ### watchtower
 
-Watchtower is deployed to automatically update Docker containers to their latest versions. It mounts the Docker socket and sets up environment variables for configuration. It is labeled to enable self-updates.
+**Description**: Watchtower automates the process of updating Docker containers to their latest versions. It continuously monitors the Docker registry for changes to container images and automatically updates running containers with the latest versions.
 
 ### homepage
 

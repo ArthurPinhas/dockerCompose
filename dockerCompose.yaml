@@ -1,19 +1,16 @@
+---
 version: '3'
-
 services:
   it-tools:
     container_name: it-tools
     image: corentinth/it-tools:latest
     ports:
-      - "8080:80"
+      - '8080:80'
     restart: unless-stopped
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
+      - com.centurylinklabs.watchtower.enable=true
 ---
-
 version: '3'
-
 services:
   plex:
     container_name: Plex
@@ -32,57 +29,50 @@ services:
       - HOME=/config
     network_mode: host
     volumes:
-      - "/volume1/docker/plex/config:/config"
-      - "/volume1/docker/plex/data:/data"
-      - "/volume1/docker/plex/transcode:/transcode"
-      - "/volume1/Movies:/movies"
-      - "/volume1/TvShows:/tvshows"
+      - /volume1/docker/plex/config:/config
+      - /volume1/docker/plex/data:/data
+      - /volume1/docker/plex/transcode:/transcode
+      - /volume1/Movies:/movies
+      - /volume1/TvShows:/tvshows
     restart: unless-stopped
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
+      - com.centurylinklabs.watchtower.enable=true
 ---
-
 version: '3'
-
 services:
   adguard_home:
     container_name: adguardhome
     image: adguard/adguardhome:latest
-    environment:
+    environment: null
     networks:
       - ag_network
     ports:
-      - "3000:3000/tcp"
-      - "3000:3000/udp"
-      - "443:443/tcp"
-      - "443:443/udp"
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "5443:5443/tcp"
-      - "5443:5443/udp"
-      - "6060:6060/tcp"
-      - "67:67/udp"
-      - "68:68/udp"
-      - "80:80/tcp"
-      - "853:853/tcp"
-      - "853:853/udp"
+      - 3000:3000/tcp
+      - 3000:3000/udp
+      - 443:443/tcp
+      - 443:443/udp
+      - 53:53/tcp
+      - 53:53/udp
+      - 5443:5443/tcp
+      - 5443:5443/udp
+      - 6060:6060/tcp
+      - 67:67/udp
+      - 68:68/udp
+      - 80:80/tcp
+      - 853:853/tcp
+      - 853:853/udp
     volumes:
-      - "/volume1/docker/adguardhome/conf:/opt/adguardhome/conf"
-      - "/volume1/docker/adguardhome/work:/opt/adguardhome/work"
+      - /volume1/docker/adguardhome/conf:/opt/adguardhome/conf
+      - /volume1/docker/adguardhome/work:/opt/adguardhome/work
     restart: unless-stopped
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
+      - com.centurylinklabs.watchtower.enable=true
 networks:
   ag_network:
     external:
       name: ag_network
-
 ---
-
 version: '3'
-
 services:
   watchtower:
     container_name: watchtower
@@ -95,12 +85,9 @@ services:
       WATCHTOWER_LABEL_ENABLE: true
       WATCHTOWER_INCLUDE_RESTARTING: true
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
+      - com.centurylinklabs.watchtower.enable=true
 ---
-
 version: '3.3'
-
 services:
   homepage:
     container_name: homepage
@@ -110,17 +97,14 @@ services:
       PUID: $PUID
       PGID: $GUID
     ports:
-      - 3000:3000
+      - '3000:3000'
     volumes:
       - /volume1/docker/homepage/config:/app/config
     restart: unless-stopped
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-
+      - com.centurylinklabs.watchtower.enable=true
 ---
-
 version: '3'
-
 services:
   hbbs:
     container_name: hbbs
@@ -132,7 +116,6 @@ services:
     depends_on:
       - hbbr
     restart: always
-
   hbbr:
     container_name: hbbr
     image: rustdesk/rustdesk-server:latest
@@ -141,21 +124,28 @@ services:
       - ./data:/root
     network_mode: host
     restart: always
-
 ---
-
 version: '3'
-
 services:
   portainer:
     container_name: portainer
     image: portainer/portainer-ce:latest
     ports:
-      - 9443:9443
+      - '9443:9443'
     volumes:
       - /volume1/docker/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-
-volumes:
-  data:
+---
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    volumes:
+      - /volume1/docker/home-assistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
