@@ -22,20 +22,8 @@ This repository contains a Docker Compose configuration file for deploying multi
 
 ### homepage
 
-The Homepage service deploys the latest image from `ghcr.io/gethomepage/homepage`. It sets up environment variables, ports, and volumes for configuration and data persistence. It is also labeled to enable automatic updates using Watchtower.
+**Description**: The Homepage service deploys a customizable web application that serves as a centralized dashboard or homepage. Users can customize the content and layout of the homepage to display useful information.
 
-### hbbs and hbbr
+### homeassistant
 
-The HBBs and HBBR services deploy the latest RustDesk Server Docker image from `rustdesk/rustdesk-server`. They each have their respective configurations for command, volumes, network mode, and restart policy.
-
-### portainer
-
-The Portainer service deploys the latest Portainer Community Edition Docker image from `portainer/portainer-ce`. It exposes port 9443 on the host and mounts volumes for data persistence. It restarts automatically unless stopped.
-
-## Usage
-
-1. Clone or download this repository to your local machine.
-2. Navigate to the directory containing the `docker-compose.yml` file.
-3. Run the following command to start the services:
-
-   `docker-compose up -d`
+**Description**: The Home Assistant service provides a powerful platform for home automation and smart home management. It allows users to integrate and control various smart devices and services from a single interface.
